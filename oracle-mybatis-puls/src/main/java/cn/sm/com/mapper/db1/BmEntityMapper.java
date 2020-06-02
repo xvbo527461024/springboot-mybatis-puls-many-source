@@ -1,4 +1,4 @@
-package cn.sm.com.mapper;
+package cn.sm.com.mapper.db1;
 import cn.sm.com.domain.BmEntity;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.springframework.stereotype.Repository;

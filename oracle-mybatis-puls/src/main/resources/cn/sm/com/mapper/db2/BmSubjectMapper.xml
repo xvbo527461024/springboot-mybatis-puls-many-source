@@ -1,0 +1,372 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.sm.com.mapper.db2.BmSubjectMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="cn.sm.com.domain.BmSubject">
+        <id column="SUBJECT_ID" property="subjectId"/>
+        <result column="SUBJECT_NAME" property="subjectName"/>
+        <result column="SUBJECT_CODE" property="subjectCode"/>
+        <result column="FULL_NAME" property="fullName"/>
+        <result column="PARENT_ID" property="parentId"/>
+        <result column="SUBJECT_KIND" property="subjectKind"/>
+        <result column="YEAR" property="year"/>
+        <result column="HAS_CHILDREN" property="hasChildren"/>
+        <result column="IS_ENABLE" property="isEnable"/>
+        <result column="REMARKS" property="remarks"/>
+        <result column="HIERARCHY" property="hierarchy"/>
+    </resultMap>
+    <!-- 查询指定id栏目 及 下面的所有子孙菜单 -->
+    <select id="selectByYear" resultMap="TreeResultMap" resultType="java.util.List">
+		select bms.subject_id,bms.subject_name, bms.parent_id from bm_subject bms where bms.year='2020'
+	</select>
+
+    <resultMap id="TreeResultMap" type="java.util.HashMap">
+        <id column="subject_id" property="subjectId" jdbcType="BIGINT"/>
+        <result column="subject_name" property="subjectName" jdbcType="VARCHAR"/>
+        <result column="parent_Id" property="parentId" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <resultMap id="BudgetTreeMap" type="java.util.LinkedHashMap">
+        <id column="id" property="id" jdbcType="BIGINT"/>
+        <result column="parent_Id" property="parentId" jdbcType="VARCHAR"/>
+        <result column="subject_Name" property="subjectName" jdbcType="VARCHAR"/>
+        <result column="year_lx_zb" property="yearLxZb" jdbcType="DOUBLE"/>
+        <result column="year_lx_fs" property="yearLxFs" jdbcType="DOUBLE"/>
+        <result column="year_lx_ye" property="yearLxYe" jdbcType="DOUBLE"/>
+        <result column="four_moth_lx_Zb" property="fourMothLxZb" jdbcType="DOUBLE"/>
+        <result column="four_moth_lx_fs" property="fourMothLxFs" jdbcType="DOUBLE"/>
+        <result column="four_moth_lx_ye" property="fourMothLxYe" jdbcType="DOUBLE"/>
+        <result column="five_moth_lx_Zb" property="fiveMothLxZb" jdbcType="DOUBLE"/>
+        <result column="five_moth_lx_fs" property="fiveMothLxFs" jdbcType="DOUBLE"/>
+        <result column="five_moth_lx_ye" property="fiveMothLxYe" jdbcType="DOUBLE"/>
+        <result column="six_moth_lx_Zb" property="sixMothLxZb" jdbcType="DOUBLE"/>
+        <result column="six_moth_lx_fs" property="sixMothLxFs" jdbcType="DOUBLE"/>
+        <result column="six_moth_lx_ye" property="sixMothLxYe" jdbcType="DOUBLE"/>
+        <result column="seven_moth_lx_Zb" property="sevenMothLxZb" jdbcType="DOUBLE"/>
+        <result column="seven_moth_lx_fs" property="sevenMothLxFs" jdbcType="DOUBLE"/>
+        <result column="seven_moth_lx_ye" property="sevenMothLxYe" jdbcType="DOUBLE"/>
+        <result column="eight_moth_lx_Zb" property="eightMothLxZb" jdbcType="DOUBLE"/>
+        <result column="eight_moth_lx_fs" property="eightMothLxFs" jdbcType="DOUBLE"/>
+        <result column="eight_moth_lx_ye" property="eightMothLxYe" jdbcType="DOUBLE"/>
+        <result column="nine_moth_lx_Zb" property="nineMothLxZb" jdbcType="DOUBLE"/>
+        <result column="nine_moth_lx_fs" property="nineMothLxFs" jdbcType="DOUBLE"/>
+        <result column="nine_moth_lx_ye" property="nineMothLxYe" jdbcType="DOUBLE"/>
+        <result column="ten_moth_lx_Zb" property="tenMothLxZb" jdbcType="DOUBLE"/>
+        <result column="ten_moth_lx_fs" property="tenMothLxFs" jdbcType="DOUBLE"/>
+        <result column="ten_moth_lx_ye" property="tenMothLxYe" jdbcType="DOUBLE"/>
+        <result column="eleven_moth_lx_Zb" property="elevenMothLxZb" jdbcType="DOUBLE"/>
+        <result column="eleven_moth_lx_fs" property="elevenMothLxFs" jdbcType="DOUBLE"/>
+        <result column="eleven_moth_lx_ye" property="elevenMothLxYe" jdbcType="DOUBLE"/>
+        <result column="twelve_moth_lx_Zb" property="twelveMothLxZb" jdbcType="DOUBLE"/>
+        <result column="twelve_moth_lx_fs" property="twelveMothLxFs" jdbcType="DOUBLE"/>
+        <result column="twelve_moth_lx_ye" property="twelveMothLxYe" jdbcType="DOUBLE"/>
+        <result column="one_moth_lx_Zb" property="oneMothLxZb" jdbcType="DOUBLE"/>
+        <result column="one_moth_lx_fs" property="oneMothLxFs" jdbcType="DOUBLE"/>
+        <result column="one_moth_lx_ye" property="oneMothLxYe" jdbcType="DOUBLE"/>
+        <result column="two_moth_lx_Zb" property="twoMothLxZb" jdbcType="DOUBLE"/>
+        <result column="two_moth_lx_fs" property="twoMothLxFs" jdbcType="DOUBLE"/>
+        <result column="two_moth_lx_ye" property="twoMothLxYe" jdbcType="DOUBLE"/>
+        <result column="three_moth_lx_Zb" property="threeMothLxZb" jdbcType="DOUBLE"/>
+        <result column="three_moth_lx_fs" property="threeMothLxFs" jdbcType="DOUBLE"/>
+        <result column="three_moth_lx_ye" property="threeMothLxYe" jdbcType="DOUBLE"/>
+    </resultMap>
+    <select id="getSelectTreeData" resultMap="BudgetTreeMap" resultType="java.util.List">
+          with ttt as
+ (select bm_view_statement.*, SYS_CONNECT_BY_PATH(id, '/') || '/' path
+    from ((select view_v_detail."SUBJECT_FULL_NAME",
+                  view_v_detail."SUBJECT_ID",
+                  view_v_detail."PARENT_ID",
+                  (four_moth_lx_zb + five_moth_lx_zb + six_moth_lx_zb +
+                  seven_moth_lx_zb + eight_moth_lx_zb + nine_moth_lx_zb +
+                  ten_moth_lx_zb + eleven_moth_lx_zb + twelve_moth_lx_zb +
+                  one_moth_lx_zb + two_moth_lx_zb + three_moth_lx_zb) year_lx_zb,
+                  (four_moth_lx_fs + five_moth_lx_fs + six_moth_lx_fs +
+                  seven_moth_lx_fs + eight_moth_lx_fs + nine_moth_lx_fs +
+                  ten_moth_lx_fs + eleven_moth_lx_fs + twelve_moth_lx_fs +
+                  one_moth_lx_fs + two_moth_lx_fs + three_moth_lx_fs) year_lx_fs,
+                  (four_moth_lx_ye + five_moth_lx_ye + six_moth_lx_ye +
+                  seven_moth_lx_ye + eight_moth_lx_ye + nine_moth_lx_ye +
+                  ten_moth_lx_ye + eleven_moth_lx_ye + twelve_moth_lx_ye +
+                  one_moth_lx_ye + two_moth_lx_ye + three_moth_lx_ye) year_lx_ye,
+                  view_v_detail."FOUR_MOTH_LX_ZB",
+                  view_v_detail."FOUR_MOTH_LX_FS",
+                  view_v_detail."FOUR_MOTH_LX_YE",
+                  view_v_detail."FIVE_MOTH_LX_ZB",
+                  view_v_detail."FIVE_MOTH_LX_FS",
+                  view_v_detail."FIVE_MOTH_LX_YE",
+                  view_v_detail."SIX_MOTH_LX_ZB",
+                  view_v_detail."SIX_MOTH_LX_FS",
+                  view_v_detail."SIX_MOTH_LX_YE",
+                  view_v_detail."SEVEN_MOTH_LX_ZB",
+                  view_v_detail."SEVEN_MOTH_LX_FS",
+                  view_v_detail."SEVEN_MOTH_LX_YE",
+                  view_v_detail."EIGHT_MOTH_LX_ZB",
+                  view_v_detail."EIGHT_MOTH_LX_FS",
+                  view_v_detail."EIGHT_MOTH_LX_YE",
+                  view_v_detail."NINE_MOTH_LX_ZB",
+                  view_v_detail."NINE_MOTH_LX_FS",
+                  view_v_detail."NINE_MOTH_LX_YE",
+                  view_v_detail."TEN_MOTH_LX_ZB",
+                  view_v_detail."TEN_MOTH_LX_FS",
+                  view_v_detail."TEN_MOTH_LX_YE",
+                  view_v_detail."ELEVEN_MOTH_LX_ZB",
+                  view_v_detail."ELEVEN_MOTH_LX_FS",
+                  view_v_detail."ELEVEN_MOTH_LX_YE",
+                  view_v_detail."TWELVE_MOTH_LX_ZB",
+                  view_v_detail."TWELVE_MOTH_LX_FS",
+                  view_v_detail."TWELVE_MOTH_LX_YE",
+                  view_v_detail."ONE_MOTH_LX_ZB",
+                  view_v_detail."ONE_MOTH_LX_FS",
+                  view_v_detail."ONE_MOTH_LX_YE",
+                  view_v_detail."TWO_MOTH_LX_ZB",
+                  view_v_detail."TWO_MOTH_LX_FS",
+                  view_v_detail."TWO_MOTH_LX_YE",
+                  view_v_detail."THREE_MOTH_LX_ZB",
+                  view_v_detail."THREE_MOTH_LX_FS",
+                  view_v_detail."THREE_MOTH_LX_YE",
+                  view_subject.parent_id new_parent_id,
+                  view_subject.subject_name,
+                  view_subject.subject_id id,
+                  view_subject.HIERARCHY
+             from (select distinct *
+                     from bm_subject
+                    start with subject_id in
+                               (select vde.subject_id
+                                  from bm_v_budget_detail vde
+                                 where vde.entity_id = 8057850
+                                   and vde.account_id = 5178031)
+                   connect by prior parent_id = subject_id) view_subject
+             left join (select vd.subject_full_name,
+                              vd.subject_id,
+                              bms.parent_id,
+                              sum(decode(vd.period_name,
+                                         bmp.year || '年04月',
+                                         vd.lx_amount,
+                                         '0')) as four_moth_lx_zb,
+                              sum(decode(vd.period_name,
+                                         bmp.year || '年04月',
+                                         vd.sum_lx_amount,
+                                         '0')) as four_moth_lx_fs,
+                              sum(decode(vd.period_name,
+                                         bmp.year || '年04月',
+                                         vd.enable_lx_amount,
+                                         '0')) as four_moth_lx_ye,
+
+                              sum(decode(vd.period_name,
+                                         bmp.year || '年05月',
+                                         vd.lx_amount,
+                                         '0')) as five_moth_lx_zb,
+                              sum(decode(vd.period_name,
+                                         bmp.year || '年05月',
+                                         vd.sum_lx_amount,
+                                         '0')) as five_moth_lx_fs,
+                              sum(decode(vd.period_name,
+                                         bmp.year || '年05月',
+                                         vd.enable_lx_amount,
+                                         '0')) as five_moth_lx_ye,
+
+                              sum(decode(vd.period_name,
+                                         bmp.year || '年06月',
+                                         vd.lx_amount,
+                                         '0')) as six_moth_lx_zb,
+                              sum(decode(vd.period_name,
+                                         bmp.year || '年06月',
+                                         vd.sum_lx_amount,
+                                         '0')) as six_moth_lx_fs,
+                              sum(decode(vd.period_name,
+                                         bmp.year || '年06月',
+                                         vd.enable_lx_amount,
+                                         '0')) as six_moth_lx_ye,
+
+                              sum(decode(vd.period_name,
+                                         bmp.year || '年07月',
+                                         vd.lx_amount,
+                                         '0')) as seven_moth_lx_zb,
+                              sum(decode(vd.period_name,
+                                         bmp.year || '年07月',
+                                         vd.sum_lx_amount,
+                                         '0')) as seven_moth_lx_fs,
+                              sum(decode(vd.period_name,
+                                         bmp.year || '年07月',
+                                         vd.enable_lx_amount,
+                                         '0')) as seven_moth_lx_ye,
+
+                              sum(decode(vd.period_name,
+                                         bmp.year || '年08月',
+                                         vd.lx_amount,
+                                         '0')) as eight_moth_lx_zb,
+                              sum(decode(vd.period_name,
+                                         bmp.year || '年08月',
+                                         vd.sum_lx_amount,
+                                         '0')) as eight_moth_lx_fs,
+                              sum(decode(vd.period_name,
+                                         bmp.year || '年08月',
+                                         vd.enable_lx_amount,
+                                         '0')) as eight_moth_lx_ye,
+
+                              sum(decode(vd.period_name,
+                                         bmp.year || '年09月',
+                                         vd.lx_amount,
+                                         '0')) as nine_moth_lx_zb,
+                              sum(decode(vd.period_name,
+                                         bmp.year || '年09月',
+                                         vd.sum_lx_amount,
+                                         '0')) as nine_moth_lx_fs,
+                              sum(decode(vd.period_name,
+                                         bmp.year || '年09月',
+                                         vd.enable_lx_amount,
+                                         '0')) as nine_moth_lx_ye,
+
+                              sum(decode(vd.period_name,
+                                         bmp.year || '年10月',
+                                         vd.lx_amount,
+                                         '0')) as ten_moth_lx_zb,
+                              sum(decode(vd.period_name,
+                                         bmp.year || '年10月',
+                                         vd.sum_lx_amount,
+                                         '0')) as ten_moth_lx_fs,
+                              sum(decode(vd.period_name,
+                                         bmp.year || '年10月',
+                                         vd.enable_lx_amount,
+                                         '0')) as ten_moth_lx_ye,
+
+                              sum(decode(vd.period_name,
+                                         bmp.year || '年11月',
+                                         vd.lx_amount,
+                                         '0')) as eleven_moth_lx_zb,
+                              sum(decode(vd.period_name,
+                                         bmp.year || '年11月',
+                                         vd.sum_lx_amount,
+                                         '0')) as eleven_moth_lx_fs,
+                              sum(decode(vd.period_name,
+                                         bmp.year || '年11月',
+                                         vd.enable_lx_amount,
+                                         '0')) as eleven_moth_lx_ye,
+
+                              sum(decode(vd.period_name,
+                                         bmp.year || '年12月',
+                                         vd.lx_amount,
+                                         '0')) as twelve_moth_lx_zb,
+                              sum(decode(vd.period_name,
+                                         bmp.year || '年12月',
+                                         vd.sum_lx_amount,
+                                         '0')) as twelve_moth_lx_fs,
+                              sum(decode(vd.period_name,
+                                         bmp.year || '年12月',
+                                         vd.enable_lx_amount,
+                                         '0')) as twelve_moth_lx_ye,
+
+                              sum(decode(vd.period_name,
+                                         bmp.year + 1 || '年01月',
+                                         vd.lx_amount,
+                                         '0')) as one_moth_lx_zb,
+                              sum(decode(vd.period_name,
+                                         bmp.year + 1 || '年01月',
+                                         vd.sum_lx_amount,
+                                         '0')) as one_moth_lx_fs,
+                              sum(decode(vd.period_name,
+                                         bmp.year + 1 || '年01月',
+                                         vd.enable_lx_amount,
+                                         '0')) as one_moth_lx_ye,
+
+                              sum(decode(vd.period_name,
+                                         bmp.year + 1 || '年02月',
+                                         vd.lx_amount,
+                                         '0')) as two_moth_lx_zb,
+                              sum(decode(vd.period_name,
+                                         bmp.year + 1 || '年02月',
+                                         vd.sum_lx_amount,
+                                         '0')) as two_moth_lx_fs,
+                              sum(decode(vd.period_name,
+                                         bmp.year + 1 || '年02月',
+                                         vd.enable_lx_amount,
+                                         '0')) as two_moth_lx_ye,
+
+                              sum(decode(vd.period_name,
+                                         bmp.year + 1 || '年03月',
+                                         vd.lx_amount,
+                                         '0')) as three_moth_lx_zb,
+                              sum(decode(vd.period_name,
+                                         bmp.year + 1 || '年03月',
+                                         vd.sum_lx_amount,
+                                         '0')) as three_moth_lx_fs,
+                              sum(decode(vd.period_name,
+                                         bmp.year + 1 || '年03月',
+                                         vd.enable_lx_amount,
+                                         '0')) as three_moth_lx_ye
+                         from bm_v_budget_detail vd,
+                              bm_period          bmp,
+                              bm_subject         bms
+                        where vd.entity_id = 8057850
+                          and bms.subject_id = vd.subject_id
+                          and vd.period_id = bmp.period_id
+                          and vd.account_id = 5178031
+                        group by vd.subject_full_name,
+                                 vd.subject_id,
+                                 bms.parent_id,
+                                 vd.subject_code
+                        order by vd.subject_code) view_v_detail
+               on view_v_detail.subject_id = view_subject.subject_id)) bm_view_statement
+   start with bm_view_statement.new_parent_id = 0
+  connect by prior bm_view_statement.id = bm_view_statement.new_parent_id)
+SELECT id,
+ HIERARCHY,
+       new_parent_id parent_id,
+       subject_name,
+          (SELECT SUM(year_lx_zb) FROM ttt WHERE path like t1.path || '%') year_lx_zb,
+       (SELECT SUM(year_lx_fs) FROM ttt WHERE path like t1.path || '%') year_lx_fs,
+       (SELECT SUM(year_lx_ye) FROM ttt WHERE path like t1.path || '%') year_lx_ye,
+       (SELECT SUM(four_moth_lx_zb) FROM ttt WHERE path like t1.path || '%') four_moth_lx_zb,
+       (SELECT SUM(four_moth_lx_fs) FROM ttt WHERE path like t1.path || '%') four_moth_lx_fs,
+       (SELECT SUM(four_moth_lx_ye) FROM ttt WHERE path like t1.path || '%') four_moth_lx_ye,
+       (SELECT SUM(five_moth_lx_zb) FROM ttt WHERE path like t1.path || '%') five_moth_lx_zb,
+       (SELECT SUM(five_moth_lx_fs) FROM ttt WHERE path like t1.path || '%') five_moth_lx_fs,
+       (SELECT SUM(five_moth_lx_ye) FROM ttt WHERE path like t1.path || '%') five_moth_lx_ye,
+       (SELECT SUM(six_moth_lx_zb) FROM ttt WHERE path like t1.path || '%') six_moth_lx_zb,
+       (SELECT SUM(six_moth_lx_fs) FROM ttt WHERE path like t1.path || '%') six_moth_lx_fs,
+       (SELECT SUM(six_moth_lx_ye) FROM ttt WHERE path like t1.path || '%') six_moth_lx_ye,
+       (SELECT SUM(seven_moth_lx_zb) FROM ttt WHERE path like t1.path || '%') seven_moth_lx_zb,
+       (SELECT SUM(seven_moth_lx_fs) FROM ttt WHERE path like t1.path || '%') seven_moth_lx_fs,
+       (SELECT SUM(seven_moth_lx_ye) FROM ttt WHERE path like t1.path || '%') seven_moth_lx_ye,
+       (SELECT SUM(eight_moth_lx_zb) FROM ttt WHERE path like t1.path || '%') eight_moth_lx_zb,
+       (SELECT SUM(eight_moth_lx_fs) FROM ttt WHERE path like t1.path || '%') eight_moth_lx_fs,
+       (SELECT SUM(eight_moth_lx_ye) FROM ttt WHERE path like t1.path || '%') eight_moth_lx_ye,
+       (SELECT SUM(nine_moth_lx_zb) FROM ttt WHERE path like t1.path || '%') nine_moth_lx_zb,
+       (SELECT SUM(nine_moth_lx_fs) FROM ttt WHERE path like t1.path || '%') nine_moth_lx_fs,
+       (SELECT SUM(nine_moth_lx_ye) FROM ttt WHERE path like t1.path || '%') nine_moth_lx_ye,
+       (SELECT SUM(ten_moth_lx_zb) FROM ttt WHERE path like t1.path || '%') ten_moth_lx_zb,
+       (SELECT SUM(ten_moth_lx_fs) FROM ttt WHERE path like t1.path || '%') ten_moth_lx_fs,
+       (SELECT SUM(ten_moth_lx_ye) FROM ttt WHERE path like t1.path || '%') ten_moth_lx_ye,
+       (SELECT SUM(eleven_moth_lx_zb)
+          FROM ttt
+         WHERE path like t1.path || '%') eleven_moth_lx_zb,
+       (SELECT SUM(eleven_moth_lx_fs)
+          FROM ttt
+         WHERE path like t1.path || '%') eleven_moth_lx_fs,
+       (SELECT SUM(eleven_moth_lx_ye)
+          FROM ttt
+         WHERE path like t1.path || '%') eleven_moth_lx_ye,
+       (SELECT SUM(twelve_moth_lx_zb)
+          FROM ttt
+         WHERE path like t1.path || '%') twelve_moth_lx_zb,
+       (SELECT SUM(twelve_moth_lx_fs)
+          FROM ttt
+         WHERE path like t1.path || '%') twelve_moth_lx_fs,
+       (SELECT SUM(twelve_moth_lx_ye)
+          FROM ttt
+         WHERE path like t1.path || '%') twelve_moth_lx_ye,
+       (SELECT SUM(one_moth_lx_zb) FROM ttt WHERE path like t1.path || '%') one_moth_lx_zb,
+       (SELECT SUM(one_moth_lx_fs) FROM ttt WHERE path like t1.path || '%') one_moth_lx_fs,
+       (SELECT SUM(one_moth_lx_ye) FROM ttt WHERE path like t1.path || '%') one_moth_lx_ye,
+       (SELECT SUM(two_moth_lx_zb) FROM ttt WHERE path like t1.path || '%') two_moth_lx_zb,
+       (SELECT SUM(two_moth_lx_fs) FROM ttt WHERE path like t1.path || '%') two_moth_lx_fs,
+       (SELECT SUM(two_moth_lx_ye) FROM ttt WHERE path like t1.path || '%') two_moth_lx_ye,
+       (SELECT SUM(three_moth_lx_zb) FROM ttt WHERE path like t1.path || '%') three_moth_lx_zb,
+       (SELECT SUM(three_moth_lx_fs) FROM ttt WHERE path like t1.path || '%') three_moth_lx_fs,
+       (SELECT SUM(three_moth_lx_ye) FROM ttt WHERE path like t1.path || '%') three_moth_lx_ye
+
+  FROM ttt T1
+
+    </select>
+</mapper>

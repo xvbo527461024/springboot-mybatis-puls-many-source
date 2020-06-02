@@ -6,7 +6,7 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>cn.sm.com</groupId>
-  <artifactId>springboot-mybatis-puls-oracle</artifactId>
+  <artifactId>springboot-mybatis-puls-many-source</artifactId>
   <packaging>pom</packaging>
   <version>1.0-SNAPSHOT</version>
   <modules>
@@ -42,6 +42,8 @@
         <type>pom</type>
         <scope>import</scope>
       </dependency>
+
     </dependencies>
+
   </dependencyManagement>
 </project>

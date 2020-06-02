@@ -69,7 +69,7 @@ public class BmEntityController extends BaseController<BmEntity> {
           Long paramsEntityId = bmEntity.getEntityId();
         try {
             if (paramsEntityId == null) {
-                Serializable     entityId = bmEntityService.add(bmEntity);
+                Serializable   entityId = bmEntityService.add(bmEntity);
                 return  AjaxResult.me().setMessage("新增成功").setObject(entityId);
             }else {
 

@@ -1,6 +1,6 @@
 package cn.sm.com.utils;
-
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -18,9 +18,9 @@ public class DealListMapUtils {
      * @param disabled 是否只能选择末级节点
      * @return
      */
-    public static List<Map<String,Object>> getTreeList(List<Map<String,Object>> list,String parentIdValue,String parentIdName,String idName,Boolean expand,Boolean disabled){
-        List<Map<String,Object>> rList = new ArrayList<>();
-        for (Map<String, Object> map : list) {
+    public static List<LinkedHashMap<String, Object>> getTreeList(List<LinkedHashMap<String, Object>> list, String parentIdValue, String parentIdName, String idName, Boolean expand, Boolean disabled){
+        List<LinkedHashMap<String, Object>> rList = new ArrayList<>();
+        for (LinkedHashMap<String, Object> map : list) {
             String parentId = String.valueOf(map.get(parentIdName));
             if(parentId.equals(parentIdValue)){
                 rList.add(getChild(map,list,idName,expand,disabled));
@@ -30,8 +30,8 @@ public class DealListMapUtils {
 
     }
     //map根节点 list所有数据
-    private static Map<String,Object> getChild(Map<String, Object> map, List<Map<String, Object>> list,String idName,Boolean expand,Boolean disabled) {
-        for (Map n : list) {
+    private static LinkedHashMap<String, Object> getChild(LinkedHashMap<String, Object> map, List<LinkedHashMap<String, Object>> list,String idName,Boolean expand,Boolean disabled) {
+        for (LinkedHashMap<String, Object> n : list) {
             //如果是子节点
             if (String.valueOf(n.get("parentId")).equals(String.valueOf(map.get(idName)))) {
 

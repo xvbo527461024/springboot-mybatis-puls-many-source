@@ -65,14 +65,14 @@ public class MyBatisPlusGenerator {
         StrategyConfig strategy = new StrategyConfig();
         //strategy.setTablePrefix(new String[]{"D_"});// 此处修改为表前缀
         strategy.setNaming(NamingStrategy.underline_to_camel);// 表名生成策略
-        strategy.setInclude(new String[]{"BM_SUBJECT"}); // 需要生成的表
+        strategy.setInclude(new String[]{"BM_PERIOD"}); // 需要生成的表
  
  
         mpg.setStrategy(strategy);
  
         // 包配置
         PackageConfig pc = new PackageConfig();
-        pc.setParent("com.xxxx");
+        pc.setParent("cn.sm.com");
         pc.setEntity("entity");
         pc.setMapper("dao");
         pc.setXml("dao.xml");

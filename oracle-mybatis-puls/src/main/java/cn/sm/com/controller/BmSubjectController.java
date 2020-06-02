@@ -1,20 +1,14 @@
 package cn.sm.com.controller;
-
-
 import cn.sm.com.domain.BmSubject;
 import cn.sm.com.service.BmSubjectService;
 import cn.sm.com.utils.AjaxResult;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
-
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-
+import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * <p>
@@ -44,11 +38,23 @@ public class BmSubjectController {
         }
     }
 
-    @RequestMapping(value = "/selectSubjectTree",method = RequestMethod.GET)
-    public AjaxResult selectSubjectTree(){
+
+    @RequestMapping(value = "/getSelectTreeData",method = RequestMethod.GET)
+    public AjaxResult getSelectTreeData(){
         try {
 
-            List<Map<String, Object>> list = bmSubjectService.selectSubjectTree();
+            List<LinkedHashMap<String, Object>> list = bmSubjectService.getSelectTreeData();
+            return  AjaxResult.me().setMessage("查询成功").setObject(list);
+        } catch (Exception e) {
+            return  AjaxResult.me().setMessage("查询失败").setSucceed(false).setObject(e.getMessage());
+
+        }
+    }
+
+    @RequestMapping(value = "/exportBudgetByEntityId",method = RequestMethod.GET)
+    public AjaxResult exportBudgetByEntityId(){
+        try {
+            List<LinkedHashMap<String, Object>> list = bmSubjectService.exportBudgetByEntityId();
             return  AjaxResult.me().setMessage("查询成功").setObject(list);
         } catch (Exception e) {
             return  AjaxResult.me().setMessage("查询失败").setSucceed(false).setObject(e.getMessage());

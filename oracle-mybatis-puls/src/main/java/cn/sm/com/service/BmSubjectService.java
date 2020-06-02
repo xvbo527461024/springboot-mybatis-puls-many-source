@@ -2,6 +2,7 @@ package cn.sm.com.service;
 import cn.sm.com.domain.BmSubject;
 import com.baomidou.mybatisplus.extension.service.IService;
 
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -15,5 +16,7 @@ import java.util.Map;
  */
 public interface BmSubjectService extends IService<BmSubject> {
 
-    List<Map<String, Object>> selectSubjectTree();
+    List<LinkedHashMap<String, Object>> getSelectTreeData();
+
+    List<LinkedHashMap<String, Object>> exportBudgetByEntityId();
 }
