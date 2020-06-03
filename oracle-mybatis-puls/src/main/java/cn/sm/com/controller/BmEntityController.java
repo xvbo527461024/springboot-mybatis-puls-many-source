@@ -1,27 +1,14 @@
 package cn.sm.com.controller;
-
-
 import cn.sm.com.base.BaseController;
 import cn.sm.com.domain.BmEntity;
 import cn.sm.com.service.BmEntityService;
 import cn.sm.com.utils.AjaxResult;
 import cn.sm.com.utils.RedisUtil;
-import cn.sm.com.utils.RedisUtil;
-import com.baomidou.mybatisplus.extension.conditions.query.QueryChainWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import org.apache.ibatis.annotations.Results;
-import org.apache.ibatis.reflection.wrapper.BaseWrapper;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.stereotype.Controller;
-import sun.plugin2.message.Serializer;
-
-import javax.annotation.Resource;
-import javax.websocket.server.PathParam;
 import java.io.Serializable;
-import java.util.List;
+
 
 /**
  * <p>
