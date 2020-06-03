@@ -8,7 +8,6 @@ import com.baomidou.mybatisplus.generator.config.GlobalConfig;
 import com.baomidou.mybatisplus.generator.config.PackageConfig;
 import com.baomidou.mybatisplus.generator.config.StrategyConfig;
 import com.baomidou.mybatisplus.generator.config.converts.OracleTypeConvert;
-import com.baomidou.mybatisplus.generator.config.rules.DbColumnType;
 import com.baomidou.mybatisplus.generator.config.rules.IColumnType;
 import com.baomidou.mybatisplus.generator.config.rules.NamingStrategy;
  
@@ -35,7 +34,7 @@ public class MyBatisPlusGenerator {
         gc.setAuthor("xubo");
  
         // 自定义文件命名，注意 %s 会自动填充表实体属性！
-        gc.setMapperName("%sDAO");
+        gc.setMapperName("%sMapper");
         gc.setXmlName("%sMapper");
         gc.setServiceName("%sService");
         gc.setServiceImplName("%sServiceImpl");
@@ -56,16 +55,16 @@ public class MyBatisPlusGenerator {
  
         //配置数据源
         dsc.setDriverName("oracle.jdbc.driver.OracleDriver");
-        dsc.setUsername("longey");
-        dsc.setPassword("dswybs");
-        dsc.setUrl("jdbc:oracle:thin:@//10.1.0.252:1521/longeypdb");
+        dsc.setUsername("xubo");
+        dsc.setPassword("xubopassword");
+        dsc.setUrl("jdbc:oracle:thin:@//127.0.0.1:1521/orcl");
         mpg.setDataSource(dsc);
  
         // 策略配置
         StrategyConfig strategy = new StrategyConfig();
         //strategy.setTablePrefix(new String[]{"D_"});// 此处修改为表前缀
         strategy.setNaming(NamingStrategy.underline_to_camel);// 表名生成策略
-        strategy.setInclude(new String[]{"BM_PERIOD"}); // 需要生成的表
+        strategy.setInclude(new String[]{"SYS_SYSTEM_LOG"}); // 需要生成的表
  
  
         mpg.setStrategy(strategy);
@@ -73,7 +72,7 @@ public class MyBatisPlusGenerator {
         // 包配置
         PackageConfig pc = new PackageConfig();
         pc.setParent("cn.sm.com");
-        pc.setEntity("entity");
+        pc.setEntity("domain");
         pc.setMapper("dao");
         pc.setXml("dao.xml");
         pc.setService("service");
