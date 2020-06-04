@@ -27,7 +27,6 @@ import java.util.List;
  * @since 2020-05-23
  */
 @Service
-@DS("longeypdb")
 public class BmSubjectServiceImpl extends ServiceImpl<BmSubjectMapper, BmSubject> implements BmSubjectService {
     @Resource
     private BmSubjectMapper bmSubjectMapper;

@@ -1,9 +1,13 @@
 package cn.sm.com.config;
+ 
 
+import cn.sm.com.domain.BmUser;
 import cn.sm.com.domain.SysSystemLog;
 import cn.sm.com.service.SysSystemLogService;
+import cn.sm.com.utils.IPUtils;
 import cn.sm.com.utils.SystemControllerLog;
 import cn.sm.com.utils.SystemServiceLog;
+import com.alibaba.fastjson.JSONObject;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.AfterThrowing;
 import org.aspectj.lang.annotation.Aspect;
@@ -18,7 +22,9 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.lang.reflect.Method;
+import java.time.LocalDateTime;
 
+ 
 /**
  * Title: SystemControllerLog
  * @date 2018年8月31日
@@ -54,27 +60,28 @@ public class SystemLogAspect {
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
         HttpSession session = request.getSession();
         //读取session中的用户
-        Enmployee user = (Enmployee) session.getAttribute("user");
+        BmUser user = (BmUser) session.getAttribute("user");
  
-        String ip = IpUtils.getIpAddr(request);
+        String ip = IPUtils.getIpAddr(request);
  
         try {
             //*========控制台输出=========*//
             System.out.println("==============前置通知开始==============");
             System.out.println("请求方法" + (joinPoint.getTarget().getClass().getName() + "." + joinPoint.getSignature().getName()));
             System.out.println("方法描述：" + getControllerMethodDescription(joinPoint));
-            System.out.println("请求人："+user.getUsername());
+            System.out.println("请求人："+user.getUserName());
             System.out.println("请求ip："+ip);
  
             //*========数据库日志=========*//
-            Action action = new Action();
-            action.setActionDes(getControllerMethodDescription(joinPoint));
-            action.setActionType("0");
-            action.setActionIp(ip);
-            action.setUserId(user.getId());
-            action.setActionTime(new Date());
+            SysSystemLog sysSystemLog = new SysSystemLog();
+            String controllerMethodDescription = getControllerMethodDescription(joinPoint);
+            sysSystemLog.setMethodName(controllerMethodDescription);
+            sysSystemLog.setLogType("0");
+            sysSystemLog.setLoginIp(ip);
+            sysSystemLog.setUserId(user.getId());
+            sysSystemLog.setActionTime(LocalDateTime.now());
             //保存数据库
-            actionService.add(action);
+            sysSystemLogService.insert(sysSystemLog);
  
         }catch (Exception e){
             //记录本地异常日志
@@ -92,14 +99,14 @@ public class SystemLogAspect {
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
         HttpSession session = request.getSession();
         //读取session中的用户
-        User user = (User) session.getAttribute("user");
+        BmUser user = (BmUser) session.getAttribute("user");
         //获取请求ip
-        String ip = IpUtils.getIpAddr(request);
+        String ip = IPUtils.getIpAddr(request);
         //获取用户请求方法的参数并序列化为JSON格式字符串
         String params = "";
         if (joinPoint.getArgs()!=null&&joinPoint.getArgs().length>0){
             for (int i = 0; i < joinPoint.getArgs().length; i++) {
-                params+= JsonUtils.objectToJson(joinPoint.getArgs()[i])+";";
+                params+= JSONObject.toJSONString(joinPoint.getArgs()[i])+";";
             }
         }
         try{
@@ -109,18 +116,17 @@ public class SystemLogAspect {
             System.out.println("异常信息:" + e.getMessage());
             System.out.println("异常方法:" + (joinPoint.getTarget().getClass().getName() + "." + joinPoint.getSignature().getName() + "()"));
             System.out.println("方法描述:" + getServiceMethodDescription(joinPoint));
-            System.out.println("请求人:" + user.getUsername());
+            System.out.println("请求人:" + user.getUserName());
             System.out.println("请求IP:" + ip);
             System.out.println("请求参数:" + params);
             /*==========数据库日志=========*/
-            Action action = new Action();
-            action.setActionDes(getServiceMethodDescription(joinPoint));
-            action.setActionType("1");
-            action.setUserId(user.getId());
-            action.setActionIp(ip);
-            action.setActionTime(new Date());
-            //保存到数据库
-            actionService.add(action);
+            SysSystemLog sysSystemLog = new SysSystemLog();
+            String controllerMethodDescription = getControllerMethodDescription(joinPoint);
+            sysSystemLog.setMethodName(controllerMethodDescription);
+            sysSystemLog.setLogType("0");
+            sysSystemLog.setLoginIp(ip);
+            sysSystemLog.setUserId(user.getId());
+            sysSystemLog.setActionTime(LocalDateTime.now());
         }catch (Exception ex){
             //记录本地异常日志
             logger.error("==异常通知异常==");

@@ -44,8 +44,8 @@ public class SysSystemLog extends EntityBase<SysSystemLog> {
     /**
      * 登录人id
      */
-    @TableField("EMPLOYEE_ID")
-    private BigDecimal employeeId;
+    @TableField("USER_ID")
+    private Long userId;
 
     /**
      * 登录人名称
@@ -98,12 +98,8 @@ public class SysSystemLog extends EntityBase<SysSystemLog> {
         this.logType = logType;
     }
 
-    public BigDecimal getEmployeeId() {
-        return employeeId;
-    }
-
-    public void setEmployeeId(BigDecimal employeeId) {
-        this.employeeId = employeeId;
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 
     public String getEmployeeName() {
@@ -142,7 +138,7 @@ public class SysSystemLog extends EntityBase<SysSystemLog> {
                 ", className='" + className + '\'' +
                 ", methodName='" + methodName + '\'' +
                 ", logType='" + logType + '\'' +
-                ", employeeId=" + employeeId +
+                ", userId=" + userId +
                 ", employeeName='" + employeeName + '\'' +
                 ", loginIp='" + loginIp + '\'' +
                 ", actionTime=" + actionTime +

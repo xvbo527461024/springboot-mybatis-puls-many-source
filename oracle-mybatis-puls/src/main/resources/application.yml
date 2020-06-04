@@ -15,9 +15,9 @@ spring:
         minIdle: 5
         maxActive: 20
       db1:
-        url: jdbc:oracle:thin:@//127.0.0.1:1521/orcl
-        username: xubo
-        password: xubopassword
+        url: jdbc:oracle:thin:@//10.1.0.84:1521/orcl
+        username: longey
+        password: 123456
         driver-class-name: oracle.jdbc.OracleDriver
         initialSize: 5
         minIdle: 5

@@ -1,6 +1,9 @@
 package cn.sm.com.service;
 import cn.sm.com.domain.SysSystemLog;
 import com.baomidou.mybatisplus.extension.service.IService;
+import org.apache.ibatis.annotations.Insert;
+
+import java.io.Serializable;
 
 /**
  * <p>
@@ -12,4 +15,5 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface SysSystemLogService extends IService<SysSystemLog> {
 
+       Serializable insert(SysSystemLog sysSystemLog);
 }
